@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="OmerVoice" uuid="1f84ab9c-6810-448a-9235-680b102d7c56">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\GLOBAL-PC\Desktop\Learn\pytonlearn\telegramBot\OmerVoice.DB</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="OmerVoice [2]" uuid="09258e2a-7594-4190-86fa-05b3dc932260">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\GLOBAL-PC\Desktop\Learn\pytonlearn\telegramBot\OmerVoice.DB</jdbc-url>
+    </data-source>
+  </component>
+</project>
