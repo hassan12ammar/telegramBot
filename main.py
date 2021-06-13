@@ -1,4 +1,4 @@
-# import logging
+import logging
 from telegram.ext import *
 import constant as key
 import responses as r
@@ -7,14 +7,10 @@ from databaseposgrete import add, give, remove_, check, sent
 updater = Updater(key.API_key)
 
 # Enable logging
-# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#                     level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
- 
-
-# def error(update, context):
-#     """Log Errors caused by Updates."""
-     
+logger = logging.getLogger(__name__)
 
 
 
@@ -115,7 +111,7 @@ def addy(response, update, type):
 
 
 def handel_massage(update, context):
-        print("hello msg")
+        logger.info("hello msg")
     # try:
         text = str(update.message.text).lower()
         chat_id = update.message.chat_id
@@ -146,11 +142,14 @@ def handel_massage(update, context):
          
 
 
-# def error(updater, contax): logging.error(f"error{updater} causees error {contax.error}")
+
+def error(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
 def main():
-    print("hello starting")
+    logger.info("hello starting")
     global updater
     dp = updater.dispatcher
      
@@ -163,11 +162,11 @@ def main():
     dp.add_handler(CommandHandler('responses', responses_command))
     dp.add_handler(CommandHandler('bot', Bot_command))
     dp.add_handler(MessageHandler(Filters.text, handel_massage))
-    # dp.add_error_handler(error)
+    dp.add_error_handler(error)
 
     updater.start_polling()
     updater.idle()
 
 
-
-main()
+if __name__ == '__main__':
+    main()
