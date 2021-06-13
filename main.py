@@ -6,17 +6,22 @@ from databaseposgrete import add, give, remove_, check, sent
 
 updater = Updater(key.API_key)
 
-print("bot Started. ")
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
-logger = logging.getLogger(__name__)
+ 
+
+def error(update, context):
+    """Log Errors caused by Updates."""
+     
+
 
 
 def join_(listy):
     seperator = " , "
     _list = seperator.join(listy)
+    
     return _list
 
 
@@ -25,7 +30,7 @@ def _sent(update):
     voice_list = []
     sticker_list = []
     picture_list = []
-    print(type(all_list))
+     
     for message in all_list:
         if message[2] == 'voices':
             voice_list.append(message[1])
@@ -33,7 +38,7 @@ def _sent(update):
             sticker_list.append(message[1])
         elif message[2] == 'pictures':
             picture_list.append(message[1])
-    # print(voice_list);print(sticker_list);print(picture_list)
+    #  
     voice_list = join_(voice_list)
     sticker_list = join_(sticker_list)
     picture_list = join_(picture_list)
@@ -45,7 +50,7 @@ def _sent(update):
 
 
 def dict_sent_command(update, contax):
-    print("from dict")
+     
     dict_responses = key.read_file()
     for key_ in dict_responses:
         update.message.reply_text(key_)
@@ -57,7 +62,7 @@ def Bot_command(update, contax):
 
 def start_comand(update, contax):
     chat_id = update.message.chat_id
-    print("start command")
+     
     update.message.reply_text(f"مرحبا بكم في بوت 𝗞𝗜𝗡𝗚𝗗𝗢𝗠 𝗟𝗜𝗕𝗥𝗔𝗥𝗬 السكلولية"
                               f" الرجاء الانتباه اذ ان هذا البوت يدار من قبل منظمة مملكة الكلاوات العالميه ادامها "
                               f"الله وابقاها "
@@ -81,9 +86,9 @@ def sentitall_command(update, context):
     chat_id=update.message.chat_id
     if chat_id in key.admin_list:
         all_ = sent()
-        print(all_)
+         
         for voice in all_:
-            print(voice)
+             
             chatIDfor = update.message.chat_id
             chatID = -1001229538530
             name_=give(voice)[1]
@@ -95,16 +100,16 @@ def sentitall_command(update, context):
 
 def responses_command(update,contax):
     key_, valu_ = key.read_file()
-    # print(valu_)
+    #  
     return key_,valu_
     # update.message.reply_text(valu_)
 
 
 def addy(response, update, type):
-    print("from function")
+     
     name_ = remove_(response, f'add{type} ')
     id_ = update.message.message_id + 2
-    print("from add \n", id_, name_)
+     
     add(id_, name_, type)
     update.message.reply_text(f"send me the message to save it with the name {name_} in {id_} id with type {type}")
 
@@ -117,9 +122,9 @@ def handel_massage(update, context):
         if type(response) is int:
             chatFrom_id = -1001229538530
             context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
-            print("I send it")
+             
         if 'addvoices ' in response:
-            print("addvoice")
+             
             addy(response, update, 'voices')
         elif 'addstickers ' in response:
             addy(response, update, 'stickers')
@@ -133,19 +138,21 @@ def handel_massage(update, context):
         elif response == 'remove':
             update.message.reply_text("okay I removed it.")
         else :
-            print("from else \n",response)
+             
             update.message.reply_text(response)
     except error() as e:
         update.message.reply_text("something goes wrong!!")
-        print(e)
+         
 
 
-def error(updater, contax): print(f"error{updater} causees error {contax.error}")
+def error(updater, contax): logging.error(f"error{updater} causees error {contax.error}")
 
 
 def main():
     global updater
     dp = updater.dispatcher
+     
+
     dp.add_handler(CommandHandler('start', start_comand))
     dp.add_handler(CommandHandler('help', help_command))
     dp.add_handler(CommandHandler('list', list_command))
@@ -158,6 +165,7 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
 
 
 main()

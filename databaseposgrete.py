@@ -33,12 +33,10 @@ def addrespone(name,respone):
 
 
 def del_(name_):
-    print("h")
     DB = psycopg2.connect(host=host, dbname=dbname, user=user, password=password)
     cr = DB.cursor()
     cr.execute(f"delete from Kingdom_Library where name ='{name_}'")
     save_(DB)
-    print(name_, "removed")
     cr.close()
     return "okay I removed it."
 
@@ -47,42 +45,32 @@ def give(id_=None, name_=None):
     DB = psycopg2.connect(host=host, dbname=dbname, user=user, password=password)
     cr = DB.cursor()
     result = None
-    print("give")
     if id_ is not None:
         cr.execute(f"select * from Kingdom_Library where id={id_}")
         result = cr.fetchall()[0:3]
     elif name_ is not None:
         cr.execute(f"select * from Kingdom_Library where name='{name_}'")
         result = cr.fetchall()[0:3]
-        # print(result)
-    try:
-        print(result[0])
-    except:
-        result = 'not'
-    # print(result, "from give")
-    print("give return", result)
+        # [].__len__
+    if len(result)==0 :
+         result = 'not'
     cr.close()
     return result[0]
 
 
 def check(name_):
-    print("check")
     name_result_ = give(name_=name_)
     if name_result_ != 'n':
-        print(name_result_[0], 'from check give')
         return name_result_[0]
     else:
-        # print("from ")
         DB = psycopg2.connect(host=host, dbname=dbname, user=user, password=password)
         cr = DB.cursor()
         cr.execute(f"select * from Kingdom_Library ")
         result = cr.fetchall()
         if name_ is None:
-            print("from None from None")
             cr.close()
             return result
         else:
-            print("from else check")
             found = None
             for voice in result:
                 if voice[1] == name_:
@@ -91,9 +79,7 @@ def check(name_):
                     found = voice
                 elif voice[1] in name_.split():
                     found = voice
-            # print("found", found, "from", name_)
-            if found is not None: return found[0]
-            print("not found")
+            if found is not None: return found[0]        
             return "منورني يا ورده انت ماعدنه هيج كلاوات اختار صوتيه موجوده بعد كلبي"
 
 
@@ -113,11 +99,9 @@ def sent():
     cr=DB.cursor()
     cr.execute(f"select * from Kingdom_Library ")
     result = cr.fetchall()
-    # print(result)
     result_ = []
     for voice in result:
-        result_.append(voice[0])
-        print(voice[0])
+        result_.append(voice[0])      
     cr.close()
     return result_
 

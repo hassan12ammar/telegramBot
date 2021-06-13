@@ -7,11 +7,11 @@
 # userinput='هلوو'
 
 # from responses import check_dict
-# print(check_dict(userinput))
+#  
 
 # admin_add_list =list (admin_list)
 # admin_add_list.remove(-1001323642182)
-# print(admin_add_list,admin_list)
+#  
 
 # import webbrowser
 # webbrowser.open(URL)
@@ -45,7 +45,7 @@
 # pickle.dump(loaded_list, open_file)
 # open_file.close()
 
-# print(loaded_list)
+#  
 
 
 # for response in response_dict:
@@ -54,8 +54,8 @@
 
 # from databaseposgrete import *
 
-# print(give(name_='يضيم'))
-# print(check('لاه'))
+#  
+#  
 # del_('الجدول')
 # from responses import response_dict
 # DB = psycopg2.connect(host=host, dbname=dbname, user=user, password=password)
