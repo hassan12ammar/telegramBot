@@ -1,8 +1,16 @@
 import logging
 from telegram.ext import *
+from tqdm.contrib import telegram
+
 import constant as key
 import responses as r
 from databaseposgrete import add, give, remove_, check, sent
+import os
+
+URL="https://git.heroku.com/kingdom125bot.git"
+PORT = int(os.environ.get('PORT', '5000'))
+bot = telegram.Bot(token = os.environ[key.API_key])
+# bot.setWebhook(f"{URL}" + f"{key.API_key}")
 
 updater = Updater(key.API_key)
 
@@ -111,35 +119,37 @@ def addy(response, update, type):
 
 
 def handel_massage(update, context):
-        logger.info("hello msg")
     # try:
-        text = str(update.message.text).lower()
-        chat_id = update.message.chat_id
-        response = r.sample_responses(text, chat_id)
-        if type(response) is int:
-            chatFrom_id = -1001229538530
-            context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
-             
-        if 'addvoices ' in response:
-             
-            addy(response, update, 'voices')
-        elif 'addstickers ' in response:
-            addy(response, update, 'stickers')
-        elif 'addpictures ' in response:
-            addy(response, update, 'pictures')
+    text = str(update.message.text).lower()
+    chat_id = update.message.chat_id
+    # chat_name = update.message.chat_name
+    user = update.message.from_user
+    first_name = update.message.chat.first_name
+    last_name = update.message.chat.last_name
+    logger.info(f"message is '{text}' from user {user} his chat id is {chat_id} his name"
+                f" is {first_name} {last_name} ")
+    response = r.sample_responses(text, chat_id)
+    if type(response) is int:
+        chatFrom_id = -1001229538530
+        context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
 
-        elif response == 'Done!':
-            id_ = update.message.message_id - 1
-            name_ = give(id_)[1]
-            update.message.reply_text(f"{response} name is {name_} in {id_} id")
-        elif response == 'remove':
-            update.message.reply_text("okay I removed it.")
-        else :
-             
-            update.message.reply_text(response)
-    # except error() as e:
-        # update.message.reply_text("something goes wrong!!")
-         
+    if 'addvoices ' in response:
+
+        addy(response, update, 'voices')
+    elif 'addstickers ' in response:
+        addy(response, update, 'stickers')
+    elif 'addpictures ' in response:
+        addy(response, update, 'pictures')
+
+    elif response == 'Done!':
+        id_ = update.message.message_id - 1
+        name_ = give(id_)[1]
+        update.message.reply_text(f"{response} name is {name_} in {id_} id")
+    elif response == 'remove':
+        update.message.reply_text("okay I removed it.")
+    else :
+        update.message.reply_text(response)
+
 
 
 
@@ -164,7 +174,11 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, handel_massage))
     dp.add_error_handler(error)
 
-    updater.start_polling()
+    # updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=PORT,
+                          url_path="YOUR TOKEN HERE")
+    updater.bot.setWebhook(f"{URL}" + f"{key.API_key}")
     updater.idle()
 
 
