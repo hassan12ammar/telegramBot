@@ -7,9 +7,9 @@ import responses as r
 from databaseposgrete import add, give, remove_, check, sent
 import os
 
-URL="https://git.heroku.com/kingdom125bot.git"
+# URL="https://git.heroku.com/kingdom125bot.git"
 PORT = int(os.environ.get('PORT', '5000'))
-bot = telegram.Bot(token = os.environ[key.API_key])
+# bot = telegram.Bot(token = os.environ[key.API_key])
 # bot.setWebhook(f"{URL}" + f"{key.API_key}")
 
 updater = Updater(key.API_key)
@@ -178,7 +178,7 @@ def main():
     updater.start_webhook(listen="0.0.0.0",
                           port=PORT,
                           url_path=key.API_key)
-    updater.bot.setWebhook(f"{URL}" + f"{key.API_key}")
+    updater.bot.setWebhook("https://git.heroku.com/kingdom125bot.git" + f"{key.API_key}")
     updater.idle()
 
 
