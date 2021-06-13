@@ -115,6 +115,7 @@ def addy(response, update, type):
 
 
 def handel_massage(update, context):
+        print("hello msg")
     # try:
         text = str(update.message.text).lower()
         chat_id = update.message.chat_id
@@ -141,7 +142,7 @@ def handel_massage(update, context):
              
             update.message.reply_text(response)
     # except error() as e:
-        update.message.reply_text("something goes wrong!!")
+        # update.message.reply_text("something goes wrong!!")
          
 
 
@@ -149,6 +150,7 @@ def handel_massage(update, context):
 
 
 def main():
+    print("hello starting")
     global updater
     dp = updater.dispatcher
      
