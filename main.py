@@ -177,7 +177,7 @@ def main():
     # updater.start_polling()
     updater.start_webhook(listen="0.0.0.0",
                           port=PORT,
-                          url_path="YOUR TOKEN HERE")
+                          url_path=key.API_key)
     updater.bot.setWebhook(f"{URL}" + f"{key.API_key}")
     updater.idle()
 
