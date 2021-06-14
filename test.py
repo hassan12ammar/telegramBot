@@ -1,4 +1,3 @@
-
 # from constant import add_response
 
 # add_response({"هلا":"لاهل"})
@@ -21,7 +20,6 @@
 # URL=f"https://api.telegram.org/bot1792666018:AAFdMxINeAY06Thw8aR--DGTqgrObpzrono/sendMessage?chat_id\
 # =-1001181247577&text={text}"
 # r = requests.get(URL)#, auth=('user', 'pass') r.status_code
-
 
 
 # from databaseposgrete import add, save_
@@ -68,4 +66,3 @@
 # DB.commit()
 # cr.close()
 # DB.close()
-
