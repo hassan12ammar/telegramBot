@@ -8,7 +8,7 @@ from databaseposgrete import add, give, remove_, check, sent
 import os
 
 # URL="https://git.heroku.com/kingdom125bot.git"
-PORT = int(os.environ.get('PORT', '5000'))
+# PORT = int(os.environ.get('PORT', '5000'))
 # bot = telegram.Bot(token = os.environ[key.API_key])
 # bot.setWebhook(f"{URL}" + f"{key.API_key}")
 
@@ -175,10 +175,10 @@ def main():
     dp.add_error_handler(error)
 
     # updater.start_polling()
-    updater.start_webhook(listen="0.0.0.0",
-                          port=PORT,
-                          url_path=key.API_key)
-    updater.bot.setWebhook("https://git.heroku.com/kingdom125bot.git" + f"{key.API_key}")
+    # updater.start_webhook(listen="0.0.0.0",
+                        #   port=PORT,
+                        #   url_path=key.API_key)
+    # updater.bot.setWebhook("https://git.heroku.com/kingdom125bot.git" + f"{key.API_key}")
     updater.idle()
 
 
