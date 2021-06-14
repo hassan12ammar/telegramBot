@@ -1,20 +1,23 @@
 import logging
 from telegram.ext import *
-# from tqdm.contrib import telegram
+from tqdm.contrib import telegram
 
 import constant as key
 import responses as r
 from databaseposgrete import add, give, remove_, check, sent
-# import os
+import os
+from dotenv import load_dotenv
 
-# URL = "https://git.heroku.com/kingdom125bot.git"
-# PORT = int(os.environ.get('PORT', '5000'))
-# updater = Updater(key.API_key)
+load_dotenv()  # take environment variables from .env.
+
+API_KEY = os.environ.get('BOT_TOKEN')
+URL = os.environ.get('URL')
+PORT = int(os.environ.get('PORT'))
+updater = Updater(API_KEY)
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
-
 logger = logging.getLogger(__name__)
 
 
@@ -60,8 +63,6 @@ def Bot_command(update, contax):
 
 
 def start_comand(update, contax):
-    chat_id = update.message.chat_id
-
     update.message.reply_text(f"مرحبا بكم في بوت 𝗞𝗜𝗡𝗚𝗗𝗢𝗠 𝗟𝗜𝗕𝗥𝗔𝗥𝗬 السكلولية"
                               f" الرجاء الانتباه اذ ان هذا البوت يدار من قبل منظمة مملكة الكلاوات العالميه ادامها "
                               f"الله وابقاها "
@@ -73,10 +74,13 @@ def help_command(update, contax):   update.message.reply_text("ههه منورن
 
 
 def list_command(update, contax):
+    # logger.info(" from list ")
     chat_id = update.message.chat_id
     if chat_id in key.admin_list:
+        # logger.info(" from list admin ")
         _sent(update)
     else:
+        logger.info(" from list not admin")
         update.message.reply_text(" هذا الامر غير متوفر لديك فقط للسادة العظام اعضاء اللملكة")
 
 
@@ -164,11 +168,12 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, handel_massage))
     dp.add_error_handler(error)
 
-    updater.start_polling()
-    # updater.start_webhook(listen="0.0.0.0",
-    #                       port=PORT,
-    #                       url_path=key.API_key)
-    # updater.bot.setWebhook("https://git.heroku.com/kingdom125bot.git" + f"{key.API_key}")
+    # updater.start_polling()
+    updater.start_webhook(
+                          port=PORT,
+                          webhook_url=URL,
+                          url_path=API_KEY)
+    # updater.bot.setWebhook(URL + API_key)
     updater.idle()
 
 

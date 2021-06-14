@@ -1,6 +1,5 @@
 import json
 
-API_key = '1792666018:AAFdMxINeAY06Thw8aR--DGTqgrObpzrono'
 admin_list=[-1001323642182,496530156,-1001229538530]
 groups_list=[]
 

@@ -44,7 +44,7 @@ def del_(name_):
 def give(id_=None, name_=None):
     DB = psycopg2.connect(host=host, dbname=dbname, user=user, password=password)
     cr = DB.cursor()
-    result = None
+    result = []
     if id_ is not None:
         cr.execute(f"select * from Kingdom_Library where id={id_}")
         result = cr.fetchall()[0:3]
