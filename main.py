@@ -1,7 +1,5 @@
 import logging
 from telegram.ext import *
-from tqdm.contrib import telegram
-
 import constant as key
 import responses as r
 from databaseposgrete import add, give, remove_, check, sent
@@ -13,7 +11,6 @@ load_dotenv()  # take environment variables from .env.
 API_KEY = os.environ.get('BOT_TOKEN')
 URL = os.environ.get('URL')
 PORT = int(os.environ.get('PORT'))
-updater = Updater(API_KEY)
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -154,8 +151,9 @@ def error(update, context):
 
 
 def main():
+    updater = Updater(API_KEY)
+
     logger.info("hello starting")
-    global updater
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', start_comand))
@@ -170,9 +168,11 @@ def main():
 
     # updater.start_polling()
     updater.start_webhook(
+        listen='0.0.0.0',
                           port=PORT,
-                          webhook_url=URL,
-                          url_path=API_KEY)
+                          url_path=API_KEY,
+                          webhook_url=URL +API_KEY ,
+                        )
     # updater.bot.setWebhook(URL + API_key)
     updater.idle()
 
