@@ -4,6 +4,7 @@ import pytz
 
 from constant import read_file, update_file, admin_list
 from databaseposgrete import save_, check, remove_, del_
+from main import logger
 
 response_dict = read_file()
 
@@ -19,6 +20,7 @@ def if_time_date(response):
         response = time
     if response == 'date':
         response = date
+    logger.info(f"time date return {response}")
     return response
 
 
