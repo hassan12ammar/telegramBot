@@ -99,5 +99,6 @@
 # print(localDatetime.strftime('%H:%M:%S'))
 # # print(pytz.all_timezones)
 # from responses import if_time_date
+# print(if_time_date('time'))
 # print(if_time_date('date'))
 
