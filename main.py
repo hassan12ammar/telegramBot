@@ -168,12 +168,10 @@ def main():
 
     # updater.start_polling()
     updater.start_webhook(
-        listen='0.0.0.0',
+                          listen='0.0.0.0',
                           port=PORT,
                           url_path=API_KEY,
-                          webhook_url=URL +API_KEY ,
-                        )
-    # updater.bot.setWebhook(URL + API_key)
+                          webhook_url=URL +API_KEY ,)
     updater.idle()
 
 

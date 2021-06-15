@@ -66,3 +66,38 @@
 # DB.commit()
 # cr.close()
 # DB.close()
+
+
+# #!/usr/bin/env python
+# from datetime import datetime
+# import pytz # $ pip install pytz
+# from geopy import geocoders # $ pip install geopy
+
+# # find timezone given country and subdivision
+# g = geocoders.GoogleV3()
+# place, (lat, lng) = g.geocode('us/la')
+# timezone = g.timezone((lat, lng))
+
+# # parse rfc3339-like format
+# utc_dt = datetime.strptime('2014-04-19 03:39:02.000', '%Y-%m-%d %H:%M:%S.%f')
+
+# # convert utc to the given timezone
+# dt = timezone.fromutc(utc_dt)
+# # -> datetime.datetime(2014, 4, 18, 22, 39, 2,
+# #        tzinfo=<DstTzInfo 'America/Chicago' CDT-1 day, 19:00:00 DST>)
+# from zoneinfo import ZoneInfo
+# from datetime import datetime, timedelta
+# import pytz
+
+# # now= datetime.now()
+# # dt = datetime(now, tz=ZoneInfo("America/Los_Angeles"))
+# # print(dt)
+
+# utcmoment_naive = datetime.now()
+# utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
+# localDatetime = utcmoment.astimezone(pytz.timezone('Etc/GMT'))
+# print(localDatetime.strftime('%H:%M:%S'))
+# # print(pytz.all_timezones)
+# from responses import if_time_date
+# print(if_time_date('date'))
+
