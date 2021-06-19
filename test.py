@@ -68,7 +68,6 @@
 # DB.close()
 
 
-# #!/usr/bin/env python
 # from datetime import datetime
 # import pytz # $ pip install pytz
 # from geopy import geocoders # $ pip install geopy
@@ -97,8 +96,30 @@
 # utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
 # localDatetime = utcmoment.astimezone(pytz.timezone('Etc/GMT'))
 # print(localDatetime.strftime('%H:%M:%S'))
-# # print(pytz.all_timezones)
+# print(pytz.all_timezones)
+
 # from responses import if_time_date
 # print(if_time_date('time'))
 # print(if_time_date('date'))
+
+# If you have local image path:
+# from telegram.ext import *
+#
+# # from main import API_KEY
+#
+# path="C:\\Users\GLOBAL-PC\Pictures\photo_2021-06-18_23-45-46.jpg"
+# API_KEY="1792666018:AAFdMxINeAY06Thw8aR--DGTqgrObpzrono"
+# updater = Updater(API_KEY)
+# def sendmessag(update,contax):
+#     contax.bot.send_photo(-1001181247577, photo=open(path, 'rb'))
+# sendmessag(updater)
+#     dp = updater.dispatcher
+#     dp.add_handler(MessageHandler(Filters.text, sendmessag))
+#     updater.start_polling()
+#     updater.idle()
+
+# If you have url of image from internet:
+# bot.send_photo(chat_id, 'your URl')
+
+
 

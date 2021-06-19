@@ -107,9 +107,14 @@ def responses_command(update, contax):
 def addy(response, update, type):
     name_ = remove_(response, f'add{type} ')
     id_ = update.message.message_id + 2
-
     add(id_, name_, type)
     update.message.reply_text(f"send me the message to save it with the name {name_} in {id_} id with type {type}")
+
+
+def last_report_command(update, context):
+    chat_id = update.message.chat_id
+    chatFrom_id = 1268734767  # 1152200882
+    context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=5747)  # 288
 
 
 def handel_massage(update, context):
@@ -163,15 +168,16 @@ def main():
     dp.add_handler(CommandHandler('sentitall', sentitall_command))
     dp.add_handler(CommandHandler('responses', responses_command))
     dp.add_handler(CommandHandler('bot', Bot_command))
+    dp.add_handler(CommandHandler('last_report', last_report_command))
     dp.add_handler(MessageHandler(Filters.text, handel_massage))
     dp.add_error_handler(error)
 
     # updater.start_polling()
     updater.start_webhook(
-                          listen='0.0.0.0',
-                          port=PORT,
-                          url_path=API_KEY,
-                          webhook_url=URL +API_KEY ,)
+        listen='0.0.0.0',
+        port=PORT,
+        url_path=API_KEY,
+        webhook_url=URL + API_KEY, )
     updater.idle()
 
 
