@@ -113,7 +113,7 @@ def addy(response, update, type):
 
 def last_report_command(update, context):
     chat_id = update.message.chat_id
-    chatFrom_id = 1268734767  # 1152200882
+    chatFrom_id = -1001268734767  # 1152200882
     context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=5747)  # 288
 
 
