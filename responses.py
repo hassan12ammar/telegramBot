@@ -73,21 +73,22 @@ def sample_responses(input_massage, chat_id):
             del_(userinput)
             return "remove"
 
-    elif 'نفر ' in userinput:
+    if 'نفر ' in userinput:
         #  
         userinput_ = remove_(userinput, 'نفر ')
         message_id = check(userinput_)
         if message_id == 'didnt work': return 'منورني ياوردة انت ماكو هيج كلاوات عدنه'
         return message_id
 
-    logger.info(f"from ekse {userinput}")
-    message_id = check(userinput)
-    logger.info(f"after check {message_id}")
-    if type(message_id) is int:
-        return message_id
-    check_dict_ = check_dict(userinput)
-    if check_dict_ is not None:
-        return check_dict_
+    else:
+        logger.info(f"from ekse {userinput}")
+        message_id = check(userinput)
+        logger.info(f"after check {message_id}")
+        if type(message_id) is int:
+            return message_id
+        check_dict_ = check_dict(userinput)
+        if check_dict_ is not None:
+            return check_dict_
 
         # else:
         # return userinput
