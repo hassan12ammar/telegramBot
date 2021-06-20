@@ -128,18 +128,18 @@ def handel_massage(update, context):
 
     response = r.sample_responses(text, chat_id)
     logger.info(f"after responses {response}")
-    if 'اخر تبليغ' in response :
+
+    if type(response) is int:
+        chatFrom_id = -1001229538530
+        context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
+
+    elif 'اخر تبليغ' in response :
         if response == 'اخر تبليغ':
             last_report_command(update, context,1)
         elif response == 'قبل اخر تبليغ':
             last_report_command(update, context,2)
         elif response == 'قبل قبل اخر تبليغ':
             last_report_command(update, context,3)
-    
-
-    if type(response) is int:
-        chatFrom_id = -1001229538530
-        context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
 
     elif 'addvoices ' in response:
         addy(response, update, 'voices')
