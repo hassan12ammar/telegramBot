@@ -80,7 +80,6 @@ def sample_responses(input_massage, chat_id):
         return message_id
 
     else:
-        logger.info("from ekse")
         message_id = check(userinput)
         if type(message_id) is int:
             return message_id

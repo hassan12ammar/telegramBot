@@ -51,7 +51,9 @@ def add_to_list(msg_id):
 def get_from_list(num):
     file = "report_id.pkl"
     list_file = open(file, "rb")
-    return list_file[num-1]
+    loaded_list = pickle.load(list_file)
+    list_file.close
+    return loaded_list[num-1]
 
 
 def send_message(msg,chat_id):
