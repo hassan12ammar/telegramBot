@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 def join_(listy):
     seperator = " , "
     _list = seperator.join(listy)
-
     return _list
 
 
@@ -111,29 +110,36 @@ def addy(response, update, type):
     update.message.reply_text(f"send me the message to save it with the name {name_} in {id_} id with type {type}")
 
 
-def last_report_command(update, context):
+def last_report_command(update, context,pos=1):
     chat_id = update.message.chat_id
-    chatFrom_id = -1001268734767  # 1152200882
-    context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=5747)  # 288
+    chatFrom_id = -1001268734767  # -1001152200882
+    message_id=key.get_from_list(pos)
+    context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=message_id)  # 288
 
 
 def handel_massage(update, context):
     # try:
     text = str(update.message.text).lower()
     chat_id = update.message.chat_id
-    # chat_name = update.message.chat_name
-    user = update.message.from_user
-    first_name = update.message.chat.first_name
-    last_name = update.message.chat.last_name
-    logger.info(f"message is '{text}' from user {user} his chat id is {chat_id} his name"
-                f" is {first_name} {last_name} ")
+    logger.info(f"message is '{text}' ather info : {update}")
+    if chat_id == -1001152200882:
+        new_report_list = key.add_to_list(update.message.message_id)
+        key.send_message(f"the report list id updaed to {new_report_list}", 496530156)
+
     response = r.sample_responses(text, chat_id)
+    if 'اخر تبليغ' in response :
+        if response == 'اخر تبليغ':
+            last_report_command(1)
+        elif response == 'قبل اخر تبليغ':
+            last_report_command(2)
+        elif response == 'قبل قبل اخر تبليغ':
+            last_report_command(3)
+
     if type(response) is int:
         chatFrom_id = -1001229538530
         context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
 
-    if 'addvoices ' in response:
-
+    elif 'addvoices ' in response:
         addy(response, update, 'voices')
     elif 'addstickers ' in response:
         addy(response, update, 'stickers')

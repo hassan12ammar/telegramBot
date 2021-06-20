@@ -27,25 +27,48 @@
 # from responses import response_dict
 
 # import pickle
+#
+# file = "report_id.pkl"
+# sample_list = [288, 286, 285]
+# list_file = open(file, "wb")
+# pickle.dump(sample_list, list_file)
+# list_file.close()
 
-# file_name = "user_id.pkl"
-# sample_list = [1, 2 , 3]
-# open_file = open(file_name, "wb")
 
-# def add_list()
+# def append_list(x):
+#     list_file = open(file, "rb")
+#     loaded_list = pickle.load(list_file)
+#     loaded_list.append(x)
+#     list_file.close()
+#     list_file_ = open(file, "wb")
+#     pickle.dump(loaded_list, list_file_)
+#     list_file_.close()
 
-# open_file = open(file_name, "rb")
-# loaded_list = pickle.load(open_file)
+
+# append_list("87")
+
+
+# def add_to_list(msg_id):
+#     file = "report_id.pkl"
+#     list_file = open(file, "rb")
+#     loaded_list = pickle.load(list_file)
+#     for i in range(len(loaded_list) - 1, 0, -1):
+#         loaded_list[i] = loaded_list[i - 1]
+#     loaded_list[0] = msg_id
+#     list_file.close()
+#     list_file_ = open(file, "wb")
+#     pickle.dump(loaded_list, list_file_)
+#     list_file_.close()
+
+
+# add_to_list(299)
+#
+# open_file = open(file, "rb")
+# loade_list = pickle.load(open_file)
+# print(loade_list)
 # open_file.close()
 
-# loaded_list.append(4)
-# open_file = open(file_name, "wb")
-# pickle.dump(loaded_list, open_file)
-# open_file.close()
-
-#  
-
-
+################################################3
 # for response in response_dict:
 #     add(response, response_dict[response])
 #     save_()
@@ -120,6 +143,3 @@
 
 # If you have url of image from internet:
 # bot.send_photo(chat_id, 'your URl')
-
-
-
