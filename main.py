@@ -127,6 +127,7 @@ def handel_massage(update, context):
         key.send_message(f"the report list id updaed to {new_report_list}", 496530156)
 
     response = r.sample_responses(text, chat_id)
+    logger.info(f"after responses {response}")
     if 'اخر تبليغ' in response :
         if response == 'اخر تبليغ':
             last_report_command(update, context,1)
@@ -154,6 +155,7 @@ def handel_massage(update, context):
     elif response == 'remove':
         update.message.reply_text("okay I removed it.")
     else:
+        logger.info("reply from else")
         update.message.reply_text(response)
 
 

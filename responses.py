@@ -36,6 +36,7 @@ def check_dict(message):
 
 
 def sample_responses(input_massage, chat_id):
+    logger.info("in sample_responses")
     userinput = str(input_massage.lower())
     admin_add_list = list(admin_list)
     admin_add_list.remove(-1001323642182)
@@ -80,7 +81,9 @@ def sample_responses(input_massage, chat_id):
         return message_id
 
     else:
+        logger.info(f"from ekse {userinput}")
         message_id = check(userinput)
+        logger.info(f"after check {message_id}")
         if type(message_id) is int:
             return message_id
         check_dict_ = check_dict(userinput)
