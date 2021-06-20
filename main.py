@@ -129,11 +129,12 @@ def handel_massage(update, context):
     response = r.sample_responses(text, chat_id)
     if 'اخر تبليغ' in response :
         if response == 'اخر تبليغ':
-            last_report_command(1)
+            last_report_command(update, context,1)
         elif response == 'قبل اخر تبليغ':
-            last_report_command(2)
+            last_report_command(update, context,2)
         elif response == 'قبل قبل اخر تبليغ':
-            last_report_command(3)
+            last_report_command(update, context,3)
+    
 
     if type(response) is int:
         chatFrom_id = -1001229538530
