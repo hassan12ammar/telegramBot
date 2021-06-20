@@ -36,10 +36,10 @@ def check_dict(message):
 
 
 def sample_responses(input_massage, chat_id):
-    logger.info("in sample_responses")
     userinput = str(input_massage.lower())
     admin_add_list = list(admin_list)
     admin_add_list.remove(-1001323642182)
+    logger.info(f"in sample_responses {userinput}")
     if chat_id in admin_add_list:  # ==496530156 or chat_id == -1001229538530:
         if 'addrespone ' in userinput or 'addresponellink ' in userinput:
             #
