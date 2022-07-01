@@ -1,0 +1,8 @@
+# environment variables
+.env
+.idea/
+old.py
+test.py
+test_2.py
+__pycache__/
+responses.json
