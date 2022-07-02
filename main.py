@@ -1,5 +1,5 @@
 # import modules we need
-from requests import request
+import requests
 from commands import Bot_command, error, help_command, list_command, sent_all_command, start_comand
 from telegram.ext import *
 
@@ -59,6 +59,6 @@ def main():
 
 if __name__ == '__main__':
     # reset the bot to ignore old messages
-    request.get(f'https://api.telegram.org/bot{API_KEY}/getUpdates?offset=-1')
+    requests.get(f'https://api.telegram.org/bot{API_KEY}/getUpdates?offset=-1')
     # start the bot
     main()
