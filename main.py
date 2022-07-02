@@ -1,16 +1,17 @@
-import logging
+# import modules we need
+from commands import Bot_command, error, help_command, list_command, sent_all_command, start_comand
+from telegram.ext.utils.types import UD
 from telegram.ext import *
-import constant as key
-import responses as r
-from databaseposgrete import add, give, remove_, check, sent
-import os
-from dotenv import load_dotenv
+import logging
 
-load_dotenv()  # take environment variables from .env.
-
-API_KEY = os.environ.get('BOT_TOKEN')
-URL = os.environ.get('URL')
-PORT = int(os.environ.get('PORT'))
+# import our files
+from constant import API_KEY, FORWAD_CHENNEL_ID, IMS_GROUP_ID, MANAGEMENT_ID, NOTIFICATION_CHANNEL_ID
+from update_data import give, update_notification 
+from constant import ADMIN_ID, ADMIN_LIST
+from responses import handle_responses
+# from responses import respone_added, respone_deleted, VPS_added, VPS_deleted
+# from responses import respone_detected, VPS_detected
+# from utilize import send_message
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -18,177 +19,69 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-def join_(listy):
-    seperator = " , "
-    _list = seperator.join(listy)
-    return _list
-
-
-def _sent(update):
-    all_list = check(None)
-    voice_list = []
-    sticker_list = []
-    picture_list = []
-
-    for message in all_list:
-        if message[2] == 'voices':
-            voice_list.append(message[1])
-        elif message[2] == 'stickers':
-            sticker_list.append(message[1])
-        elif message[2] == 'pictures':
-            picture_list.append(message[1])
-    #  
-    voice_list = join_(voice_list)
-    sticker_list = join_(sticker_list)
-    picture_list = join_(picture_list)
-    update.message.reply_text("متوفر لدينا الاتي:")
-    update.message.reply_text(f"الصوتيات :  \n {voice_list}")
-    update.message.reply_text(f"الستكرات :  \n {sticker_list}")
-    update.message.reply_text(f"الصور : \n {picture_list}")
-    update.message.reply_text("ارسل لي كلمه نفر مع اسم السكلولو التي تريدها وسوف نرسلها لك")
-
-
-def dict_sent_command(update, contax):
-    dict_responses = key.read_file()
-    for key_ in dict_responses:
-        update.message.reply_text(key_)
-
-
-def Bot_command(update, contax):
-    update.message.reply_text("نعم حبيبي الغالي تفضل")
-
-
-def start_comand(update, contax):
-    update.message.reply_text(f"مرحبا بكم في بوت 𝗞𝗜𝗡𝗚𝗗𝗢𝗠 𝗟𝗜𝗕𝗥𝗔𝗥𝗬 السكلولية"
-                              f" الرجاء الانتباه اذ ان هذا البوت يدار من قبل منظمة مملكة الكلاوات العالميه ادامها "
-                              f"الله وابقاها "
-                              f" ويحمل الكثير من التسافل وان هدفه الاول والاخير هو الهيمنه على العالم لذا وجب التنبيه ")
-    update.message.reply_text("بالرفاه والبنين حبيبي")
-
-
-def help_command(update, contax):   update.message.reply_text("ههه منورني يا ورده انت شتريدني اساعدك بشنو. ")
-
-
-def list_command(update, contax):
-    # logger.info(" from list ")
-    chat_id = update.message.chat_id
-    if chat_id in key.admin_list:
-        # logger.info(" from list admin ")
-        _sent(update)
-    else:
-        logger.info(" from list not admin")
-        update.message.reply_text(" هذا الامر غير متوفر لديك فقط للسادة العظام اعضاء اللملكة")
-
-
-def sentitall_command(update, context):
-    chat_id = update.message.chat_id
-    if chat_id in key.admin_list:
-        all_ = sent()
-
-        for voice in all_:
-            chatIDfor = update.message.chat_id
-            chatID = -1001229538530
-            name_ = give(voice)[1]
-            type_ = give(voice)[2]
-            update.message.reply_text(f"{name_} , {type_}")
-            context.bot.forward_message(chat_id=chatIDfor, from_chat_id=chatID, message_id=voice)
-    else:
-        update.message.reply_text("شنو انت لوتي لو تستلوت علينه هذا الامر بس للادمنيه")
-
-
-def responses_command(update, contax):
-    key_, valu_ = key.read_file()
-    #  
-    return key_, valu_
-    # update.message.reply_text(valu_)
-
-
-def addy(response, update, type):
-    name_ = remove_(response, f'add{type} ')
-    id_ = update.message.message_id + 2
-    add(id_, name_, type)
-    update.message.reply_text(f"send me the message to save it with the name {name_} in {id_} id with type {type}")
-
-
-def last_report_command(update, context,pos=1):
-    chat_id = update.message.chat_id
-    chatFrom_id = -1001152200882  # -1001152200882
-    message_id=key.get_from_list(pos)
-    context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=message_id)  # 288
-
-
 def handel_massage(update, context):
-    # try:
-    text = str(update.message.text).lower()
-    chat_id = update.message.chat_id
-    logger.info(f"message is '{text}' ather info : {update}")
-    if chat_id == -1001152200882:
-        new_report_list = key.add_to_list(update.message.message_id)
-        key.send_message(f"the report list id updaed to {new_report_list}", 496530156)
 
-    response = r.sample_responses(text, chat_id)
-    logger.info(f"after responses {response}")
+    try:
+        text = str(update.message.text).lower()
+        chat_id = update.message.chat_id
+        message_id = update.message.message_id
+        from_channel = False
+    except:
+        text = str(update.channel_post.text)
+        chat_id = update.channel_post.chat_id
+        message_id = update.channel_post.message_id
+        from_channel = True
 
-    if type(response) is int:
-        chatFrom_id = -1001229538530
-        context.bot.forward_message(chat_id=chat_id, from_chat_id=chatFrom_id, message_id=response)
+    if from_channel:
+        if chat_id == FORWAD_CHENNEL_ID:
+            context.bot.forward_message(chat_id = IMS_GROUP_ID, from_chat_id = chat_id, message_id = message_id)
 
-    elif 'اخر تبليغ' in response :
-        if response == 'اخر تبليغ':
-            last_report_command(update, context,1)
-        elif response == 'قبل اخر تبليغ':
-            last_report_command(update, context,2)
-        elif response == 'قبل قبل اخر تبليغ':
-            last_report_command(update, context,3)
+        if chat_id == NOTIFICATION_CHANNEL_ID:
+            update_notification(message_id)
 
-    elif 'addvoices ' in response:
-        addy(response, update, 'voices')
-    elif 'addstickers ' in response:
-        addy(response, update, 'stickers')
-    elif 'addpictures ' in response:
-        addy(response, update, 'pictures')
-
-    elif response == 'Done!':
-        id_ = update.message.message_id - 1
-        name_ = give(id_)[1]
-        update.message.reply_text(f"{response} name is {name_} in {id_} id")
-    elif response == 'remove':
-        update.message.reply_text("okay I removed it.")
     else:
-        logger.info("reply from else")
-        update.message.reply_text(response)
+        response, type = handle_responses(text, chat_id, message_id)
 
+        if response :
+            if type == "media":
+                chatFrom_id = MANAGEMENT_ID
+                context.bot.forward_message(chat_id = chat_id, from_chat_id = chatFrom_id, message_id = response)
+            elif type == True:
+                update.message.reply_text(response[0])
+            else:
+                update.message.reply_text(response)
+        # else:
+        #     print("False")
 
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+        # logger.info(f"after responses {response}")
 
 
 def main():
     updater = Updater(API_KEY)
 
-    logger.info("hello starting")
+    logger.info("start :) ")
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', start_comand))
-    dp.add_handler(CommandHandler('help', help_command))
-    dp.add_handler(CommandHandler('list', list_command))
-    dp.add_handler(CommandHandler('dict', dict_sent_command))
-    dp.add_handler(CommandHandler('sentitall', sentitall_command))
-    dp.add_handler(CommandHandler('responses', responses_command))
-    dp.add_handler(CommandHandler('bot', Bot_command))
-    dp.add_handler(CommandHandler('last_report', last_report_command))
-    dp.add_handler(MessageHandler(Filters.text, handel_massage))
+    dp.add_handler(CommandHandler('start', start_comand) )
+    dp.add_handler(CommandHandler('help', help_command) )
+    # dp.add_handler(CommandHandler('list', list_command) )
+    # dp.add_handler(CommandHandler('dict', dict_sent_command) )
+    dp.add_handler(CommandHandler('sentitall', sent_all_command) )
+    # dp.add_handler(CommandHandler('responses', responses_command) )
+    dp.add_handler(CommandHandler('bot', Bot_command) )
+    dp.add_handler(MessageHandler(Filters.text, handel_massage) )
     dp.add_error_handler(error)
 
-    # updater.start_polling()
-    updater.start_webhook(
-        listen='0.0.0.0',
-        port=PORT,
-        url_path=API_KEY,
-        webhook_url=URL + API_KEY, )
-    updater.idle()
+    updater.start_polling()
+    # updater.start_webhook(
+    #     listen = '0.0.0.0',
+    #     port = PORT,
+    #     url_path = API_KEY,
+    #     webhook_url = URL + API_KEY, )
+    # updater.idle()
 
 
 if __name__ == '__main__':
+    # print("Hello World")
+    # send_message("Hello", ADMIN_ID)
     main()

@@ -1,64 +1,31 @@
-import json
-import pickle
-import requests
+from dotenv import load_dotenv
+import os
 
-admin_list = [-1001323642182, 496530156, -1001229538530]
-groups_list = []
+load_dotenv()  # take environment variables from .env.
 
+# 
+HOST = os.environ.get("host")
+DBNAME = os.environ.get("dbname")
+USER = os.environ.get("user")
+PASSWORD = os.environ.get("password")
 
-def read_file():
-    with open('responses.json', encoding="utf8") as f:
-        data = f.read()
-    response_dict = json.loads(data, strict=False)
-    f.close()
-    return dict(response_dict)
+# 
+API_KEY = os.environ.get('TEST_BOT_TOKEN')
+URL = os.environ.get('URL')
+PORT = int(os.environ.get('PORT') )
+# BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
+# 
+IMS_GROUP_ID = int(os.environ.get('ims_group_is') )
+FORWAD_CHENNEL_ID = int(os.environ.get('forwad_message_id') )
+NOTIFICATION_CHANNEL_ID = int(os.environ.get('notification_channel_id') )
+ADMIN_ID = int(os.environ.get('admin_id') )
+MANAGEMENT_ID = int(os.environ.get('management_id') )
+PROFOUND_CABAL_ID = int(os.environ.get('profound_cabal_id') )
+PERSONAL_CHANEL_ID = int(os.environ.get('not_important_channel_id') )
+FORWAD_MESSAGE_ID = int(os.environ.get('forwad_message_id') )
 
-def update_file(new_dict):
-    with open('responses.json', 'r+', encoding="utf8") as file:
-        file.seek(0)
-        json.dump(new_dict, file, indent=4, ensure_ascii=False)
-        file.truncate()
-        return f"the response {new_dict} added"
+ADMIN_LIST = [PROFOUND_CABAL_ID, ADMIN_ID, MANAGEMENT_ID]
 
-
-def remove_response(remove_response):
-    with open('responses.json', 'r+', encoding="utf8") as file:
-        file_data = json.load(file)
-        if remove_response in file_data:
-            file_data.pop(remove_response)
-            file.seek(0)
-            json.dump(file_data, file, indent=4)
-            return_ = "the response added"
-        else:
-            return None
-
-
-def add_to_list(msg_id):
-    file = "report_id.pkl"
-    list_file = open(file, "rb")
-    loaded_list = pickle.load(list_file)
-    for i in range(len(loaded_list) - 1, 0, -1):
-        loaded_list[i] = loaded_list[i - 1]
-    loaded_list[0] = msg_id
-    list_file.close()
-    list_file_ = open(file, "wb")
-    pickle.dump(loaded_list, list_file_)
-    list_file_.close()
-    return loaded_list
-
-
-def get_from_list(num):
-    file = "report_id.pkl"
-    list_file = open(file, "rb")
-    loaded_list = pickle.load(list_file)
-    list_file.close
-    return loaded_list[num-1]
-
-
-def send_message(msg,chat_id):
-    URL=f"https://api.telegram.org/bot1792666018:AAFdMxINeAY06Thw8aR--DGTqgrObpzrono/sendMessage?chat_id\
-    ={chat_id}&text={msg}"
-    r = requests.get(URL)#, auth=('user', 'pass') r.status_code
-
+SEND_URL = f"https://api.telegram.org/bot{API_KEY}/sendMessage?chat_id=chat_id&text=msg"
 

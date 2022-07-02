@@ -1,94 +1,128 @@
-from datetime import datetime
-import pytz
-from constant import read_file, update_file, admin_list, get_from_list
-from databaseposgrete import save_, check, remove_, del_
-from main import logger
+# import modules we need
+import psycopg2
+from update_data import add_respone, add_vsp, check, remove_from_string, delet_from_database
 
-response_dict = read_file()
+# import our files
+from constant import ADMIN_LIST, DBNAME, HOST, PASSWORD, USER
+from utilize import if_time_date, make_log
 
+def give(input_name=None, table="Kingdom_Library"):
+    DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
+    cr = DB.cursor()
+    # and name_ is not None
+    if table == "Kingdom_Library":
+        sql = f"select id from {table} where name = \'{input_name}\';"
 
-def if_time_date(response):
-    utcmoment_naive = datetime.now()
-    utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
-    now = utcmoment.astimezone(pytz.timezone('Etc/GMT'))
-    # now = datetime.now()
-    time = now.strftime('%I:%M:%S')  # ("%H:%M:%S")
-    date = now.strftime("%d/%m/%y")
-    if response == 'time':
-        response = time
-    if response == 'date':
-        response = date
-    logger.info(f"time date return {response}")
-    return response
+    elif table == "Kingdom_Library_respone":
+        sql = f"select respone from {table} where name = \'{input_name}\';"
 
+    cr.execute(sql)
+    respone = cr.fetchall()
 
-def check_dict(message):
-    if message in response_dict:
-        response = response_dict[message]
-        response = if_time_date(response)
-        return response
-    for key in response_dict:
-        if key in message:
-            response = response_dict[key]
-            response = if_time_date(response)
-            return response
-    return None
+    if respone:
+        respone = respone[0][0]
+        cr.close()
+
+        return respone
+
+    return False
 
 
-def sample_responses(input_massage, chat_id):
-    userinput = str(input_massage.lower())
-    admin_add_list = list(admin_list)
-    admin_add_list.remove(-1001323642182)
-    logger.info(f"in sample_responses {userinput}")
-    if chat_id in admin_add_list:  # ==496530156 or chat_id == -1001229538530:
+def check(user_input, table_="Kingdom_Library", auto=True):
+    type = "media"
+    index = 1
+    out_index = 0
+    if table_ == "Kingdom_Library_respone":
+        type = "respone"
+        index = 0
+        out_index = 1
+
+    result_respone = give(user_input, table_)
+    if result_respone:
+        return result_respone, type
+
+    else:
+        DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
+        cr = DB.cursor()
+        cr.execute(f"select * from {table_}")
+        result = cr.fetchall()
+        if user_input is None:
+            cr.close()
+            return result
+        else:
+            found = None
+            for media in result:
+                if media[index] in user_input and len(media[index]) > 2:  # .split in?
+                    found = media
+                elif media[index] in user_input.split():
+                    found = media
+            if found:
+                return found[out_index], type
+            if auto:
+                return check(user_input, table_="Kingdom_Library_respone", auto=False)
+
+            return False, False
+
+
+def return_all():
+    DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
+    cr = DB.cursor()
+    cr.execute(f"select * from Kingdom_Library ")
+    result = cr.fetchall()
+    returned = []
+    for vsp in result:
+        returned.append(vsp[0])
+    cr.close()
+    return returned
+
+
+def handle_responses(input_massage, chat_id, message_id):
+    userinput = str(input_massage).lower()
+    # check if respone from admin
+    if chat_id in ADMIN_LIST:
+        # check if we need to add respone to database
         if 'addrespone ' in userinput or 'addresponellink ' in userinput:
-            #
-            userinput = remove_(userinput, 'addrespone ')
+            # split to name respone and add to our respone table
+            userinput = remove_from_string(userinput, 'addrespone ')
             if userinput[:4] == 'link':
-                userinput = remove_(userinput, 'link ')
+                userinput = remove_from_string(userinput, 'link ')
                 key, value = userinput.split(",")
             else:
                 key, value = userinput.split(":")
-            response_dict[key] = value
-            update_file(response_dict)
+            add_respone(key, value)
 
-            return f"the response {userinput} inserted"
+            return (f"the response {userinput} inserted", True)
+
+        # check if we need to remove drom database
         elif 'removerespone ' in userinput:
-            userinput = remove_(userinput, 'removerespone ')
-            del response_dict[userinput]
-            if len(response_dict) == 0:
-                update_file(response_dict)
+            userinput = remove_from_string(userinput, 'removerespone ')
+            delet_from_database(userinput, "Kingdom_Library_respone")
 
-            return f"the response {userinput} removed"
+            return (f"the response {userinput} removed", True)
 
+        # check if we need to add media to database
         elif 'addvoices ' in userinput or 'addstickers ' in userinput or 'addpictures ' in userinput:
-            return userinput
+            if 'addvoices ' in userinput:
+                userinput = add_vsp(userinput, message_id, 'voices')
+            elif 'addstickers ' in userinput:
+                userinput = add_vsp(userinput, message_id, 'stickers')
+            elif 'addpictures ' in userinput:
+                userinput = add_vsp(userinput, message_id, 'pictures')
 
-        elif userinput == 'save':
-            save_();
-            return 'Done!'
+            return (f"{userinput} added succesfully", True)
 
-        elif 'removesaive ' in userinput:
-            userinput = remove_(userinput, 'removesaive ')
-            del_(userinput)
-            return "remove"
+        # check if we need to remove media from database
+        elif 'removesaive ' in userinput or 'removerespo ' in userinput:
+            table = "Kingdom_Library"
+            if 'removerespo ' in userinput:
+                table = "Kingdom_Library_respone"
+            userinput = remove_from_string(userinput, 'removesaive ')
+            delet_from_database(userinput, table)
 
-    if 'نفر ' in userinput:
-        #  
-        userinput_ = remove_(userinput, 'نفر ')
-        message_id = check(userinput_)
-        if message_id == 'didnt work': return 'منورني ياوردة انت ماكو هيج كلاوات عدنه'
-        return message_id
+            return (f"{userinput} removed succesfully", True)
 
-    else:
-        logger.info(f"from ekse {userinput}")
-        message_id = check(userinput)
-        logger.info(f"after check {message_id}")
-        if type(message_id) is int:
-            return message_id
-        check_dict_ = check_dict(userinput)
-        if check_dict_ is not None:
-            return check_dict_
+        # check return a tuple of respone and it's type 
+        respone_ = check(userinput)
+        respone_ = if_time_date(respone_[0]), "date_time"
 
-        # else:
-        # return userinput
+        return respone_
