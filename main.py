@@ -1,4 +1,5 @@
 # import modules we need
+from requests import request
 from commands import Bot_command, error, help_command, list_command, sent_all_command, start_comand
 from telegram.ext import *
 
@@ -44,17 +45,20 @@ def main():
     dp.add_error_handler(error)
 
     # Start the Bot
-    # updater.start_polling()
+    updater.start_polling()
 
-    updater.start_webhook(
-        listen = '0.0.0.0',
-        port = PORT,
-        url_path = API_KEY,
-        webhook_url = URL + API_KEY, )
-    updater.bot.setWebhook(URL + API_KEY)
+    # updater.start_webhook(
+    #     listen = '0.0.0.0',
+    #     port = PORT,
+    #     url_path = API_KEY,
+    #     webhook_url = URL + API_KEY, )
+    # updater.bot.setWebhook(URL + API_KEY)
 
-    updater.idle()
+    # updater.idle()
 
 
 if __name__ == '__main__':
+    # reset the bot to ignore old messages
+    request.get(f'https://api.telegram.org/bot{API_KEY}/getUpdates?offset=-1')
+    # start the bot
     main()
