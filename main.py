@@ -1,6 +1,5 @@
 # import modules we need
 import requests
-from turtle import pd
 from telegram.ext import *
 from commands import Bot_command, error, help_command, list_command, start_comand
 
