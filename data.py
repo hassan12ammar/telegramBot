@@ -1,17 +1,19 @@
 # import modules we need
+from typing import List
 import psycopg2
 
 # import our files
 from constant import DBNAME, HOST, PASSWORD, USER
+from utilize import message_added
 
 
 
-def save_(DB=psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)):
+def save_(DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)) -> None:
     DB.commit()
     DB.close()
 
 
-def add_non_forwarded(id, name, type_added):
+def add_non_forwarded(id:str, name:str, type_added:str) -> None:
     DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
     cr = DB.cursor()
     sql_add_respone = "insert into Kingdom_Library (id, name, type) values (%s, %s, %s)"
@@ -20,13 +22,12 @@ def add_non_forwarded(id, name, type_added):
     save_(DB)
 
 
-def add_forwarded(message_id, response, type_added):
+def add_forwarded(message_id:int, response:str, type_added:str) -> str:
     message_id += 2
     add_non_forwarded(message_id, response, type_added)
-    return f"send me the message to save it with the name {response} in {message_id} id with type {type_added}"
+    return message_added(message_id, response, type_added)
 
-
-def delet(name, table="Kingdom_Library"):
+def delet(name:str, table:str="Kingdom_Library") -> None:
     DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
     cr = DB.cursor()
     cr.execute(f"""delete from {table} where name = '{name}' """)
@@ -34,7 +35,7 @@ def delet(name, table="Kingdom_Library"):
     cr.close()
 
 
-def edit(name, updated, new_updated, table='Kingdom_Library'):
+def edit(name:str, updated:str, new_updated:str, table:str='Kingdom_Library') -> None:
     DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
     cr = DB.cursor()
     cr.execute(f"""UPDATE kingdom_library
@@ -44,15 +45,9 @@ def edit(name, updated, new_updated, table='Kingdom_Library'):
     cr.close()
 
 
-def give(input_name=None, table="Kingdom_Library"):
+def give(input_name:str, table:str="Kingdom_Library") -> List[tuple]:
     DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
     cr = DB.cursor()
-    if input_name is None:
-        cr.execute(f'SELECT * FROM {table}')
-        respone = cr.fetchall()
-        cr.close()
-
-        return respone
 
     cr.execute(f'''SELECT (id, type) 
                 FROM {table} 
@@ -67,11 +62,8 @@ def give(input_name=None, table="Kingdom_Library"):
 def return_all():
     DB = psycopg2.connect(host=HOST, dbname=DBNAME, user=USER, password=PASSWORD)
     cr = DB.cursor()
-    cr.execute(f"select * from Kingdom_Library ")
+    cr.execute(f"select * from Kingdom_Library")
     result = cr.fetchall()
-    returned = []
-    for vsp in result:
-        returned.append(vsp[0])
     cr.close()
-    return returned
+    return result
 

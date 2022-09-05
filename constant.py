@@ -1,11 +1,10 @@
 # import modules we need
-from dotenv import load_dotenv
 import os
-
-# import our files
+import ast
+from dotenv import load_dotenv
 
 # load environment variables 
-load_dotenv()  
+load_dotenv()
 
 # database variables
 HOST = os.environ.get("host")
@@ -15,8 +14,8 @@ PASSWORD = os.environ.get("password")
 PORT = int(os.environ.get('PORT') )
 
 # bot variables
-API_KEY = os.environ.get('BOT_TOKEN')
 TEST_API_KEY = os.environ.get('TEST_BOT_TOKEN')
+API_KEY =  os.environ.get('BOT_TOKEN') # TEST_API_KEY
 URL = os.environ.get('URL')
 
 # telegram variables
@@ -29,6 +28,8 @@ PROFOUND_CABAL_ID = int(os.environ.get('profound_cabal_id') )
 PERSONAL_CHANEL_ID = int(os.environ.get('not_important_channel_id') )
 FORWAD_MESSAGE_ID = int(os.environ.get('forwad_message_id') )
 
-ADMIN_LIST = [PROFOUND_CABAL_ID, ADMIN_ID, MANAGEMENT_ID]
+admin_names = ast.literal_eval(os.environ.get("ADMIN_LIST"))
+ADMIN_LIST = [globals()[admin_name] for admin_name in admin_names]
+
 SEND_URL = f"https://api.telegram.org/bot{API_KEY}/sendMessage?chat_id=chat_id&text=msg"
 

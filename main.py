@@ -1,11 +1,12 @@
 # import modules we need
 import requests
-from commands import Bot_command, error, help_command, list_command, sent_all_command, start_comand
+from turtle import pd
 from telegram.ext import *
+from commands import Bot_command, error, help_command, list_command, start_comand
 
 # import our files
-from constant import API_KEY, MANAGEMENT_ID, PORT, URL
 from responses import handle_responses
+from constant import API_KEY, MANAGEMENT_ID, PORT, URL, TEST_API_KEY
 
 
 def handel_massage(update, context):
@@ -17,7 +18,7 @@ def handel_massage(update, context):
     # get the appropriate response
     response = handle_responses(text, chat_id, message_id)
 
-    # take the proper action
+    # take the proper action forward or send a message respone
     if response :
         type_respone = response[-1]
         # check if we need to forward
@@ -38,15 +39,14 @@ def main():
     dp.add_handler(CommandHandler('help', help_command) )
     dp.add_handler(CommandHandler('list', list_command) )
     dp.add_handler(CommandHandler('start', start_comand) )
-    dp.add_handler(CommandHandler('sentitall', sent_all_command) )
 
     dp.add_handler(MessageHandler(Filters.text, handel_massage) )
 
     dp.add_error_handler(error)
 
-    # Start the Bot
-    # updater.start_polling()
-
+    # Start the Bot Locally
+    # updater.start_polling()_command
+    # Start the Bot on server
     updater.start_webhook(
         listen = '0.0.0.0',
         port = PORT,
@@ -56,9 +56,7 @@ def main():
 
     updater.idle()
 
-
 if __name__ == '__main__':
     # reset the bot to ignore old messages
     requests.get(f'https://api.telegram.org/bot{API_KEY}/getUpdates?offset=-1')
-    # start the bot
     main()

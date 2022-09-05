@@ -18,18 +18,15 @@ def send_message(msg, chat_id):
     url = SEND_URL.replace('chat_id', str(chat_id))
     url = url.replace('msg', str(msg))
     url = url.replace(str(chat_id), 'chat_id', 1)
-
-    r = requests.get(url)
+    requests.get(url)
 
 
 def if_time_date(response):
     now = datetime.now(pytz.timezone('Asia/Baghdad'))
-    if response[0] == 'time':
-        time = now.strftime('%I:%M:%S')  # ("%H:%M:%S")
-        response[0] = time
-    elif response == 'date':
-        date = now.strftime("%d/%m/%y")
-        response[0] = date
+    if response == 'time':
+        response = now.strftime('%I:%M:%S')  # ("%H:%M:%S")
+    elif response == 'date' :
+        response = now.strftime("%d/%m/%y")
     return response
 
 
@@ -48,3 +45,7 @@ def remove_from_string(word, remove):
         if i not in checklist:
             output_name = output_name + word[i]
     return output_name
+
+
+def message_added(message_id, response, type_added):
+    return f"send me the message to save it with the name {response} in {message_id} id with type {type_added}"

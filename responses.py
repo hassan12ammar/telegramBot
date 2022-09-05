@@ -1,10 +1,7 @@
-# import modules we need
-
 # import our files
-from data import add_non_forwarded, add_forwarded, delet, edit, give
-from utilize import if_time_date, remove_from_string
 from constant import ADMIN_LIST
-
+from utilize import if_time_date, remove_from_string
+from data import add_non_forwarded, add_forwarded, delet, edit, give
 
 
 def handle_responses(input_massage, chat_id, message_id):
@@ -32,13 +29,12 @@ def handle_responses(input_massage, chat_id, message_id):
 
                 add_non_forwarded(key, value, type_added)
 
-                respone = f"the response {splited[1]} inserted"
+                respone = f"the response {text} inserted"
 
             return (respone, 'add')
 
         elif 'remove' in splited[0]:
             delet(splited[1], "Kingdom_Library")
-
             return (f"the response {splited[1]} removed", 'remove')
 
         elif 'edit' in splited[0]:
@@ -47,6 +43,6 @@ def handle_responses(input_massage, chat_id, message_id):
 
         # check return a tuple of respone and it's type
         respone = give(userinput)
-        respone = if_time_date(respone)
+        respone[0] = if_time_date(respone[0])
 
         return respone

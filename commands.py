@@ -1,11 +1,7 @@
-# import modules we need
-
 # import our files
 from constant import ADMIN_LIST, MANAGEMENT_ID
 from utilize import join_with_sep, make_log
 from data import return_all
-from responses import give
-
 
 
 def Bot_command(update, contax):
@@ -30,26 +26,32 @@ def error(update, context):
 
 
 def send_all(update):
-    all_list = give(None)
+    # get all response in database
+    all_list = return_all()
+
+    # declare variables for each type 
     voice_list = []
     sticker_list = []
     picture_list = []
     other_list = []
 
+    # check and assign each respone with its type
     for message in all_list:
-        if message[2] == 'voices':
+        if message[2][:-1] == 'voices':
             voice_list.append(message[1])
-        elif message[2] == 'stickers':
+        elif message[2][:-1] == 'stickers':
             sticker_list.append(message[1])
-        elif message[2] == 'pictures':
+        elif message[2][:-1] == 'pictures':
             picture_list.append(message[1])
         else:
             other_list.append(message[1])
-    #  
+
+    # make lists readable
     voice_list = join_with_sep(voice_list)
     sticker_list = join_with_sep(sticker_list)
     picture_list = join_with_sep(picture_list)
     other_list = join_with_sep(other_list)
+
     update.message.reply_text("متوفر لدينا الاتي:")
     update.message.reply_text(f"الصوتيات :  \n {voice_list}")
     update.message.reply_text(f"الستكرات :  \n {sticker_list}")
@@ -59,28 +61,9 @@ def send_all(update):
 
 
 def list_command(update, contax):
-    # logger.info(" from list ")
     chat_id = update.message.chat_id
     if chat_id in ADMIN_LIST:
-        # logger.info(" from list admin ")
         send_all(update)
     else:
-        # make_log(" from list not admin")
         update.message.reply_text(" هذا الامر غير متوفر لديك فقط للسادة العظام اعضاء اللملكة")
 
-
-def sent_all_command(update, context):
-    chat_id = update.message.chat_id
-    if chat_id in ADMIN_LIST:
-        all_ = return_all()
-
-        for voice in all_:
-            chatIDfor = update.message.chat_id
-            chatID = MANAGEMENT_ID
-            returned_give = give(voice)
-            name_ = returned_give[1]
-            type_ = returned_give[2]
-            update.message.reply_text(f"{name_} , {type_}")
-            context.bot.forward_message(chat_id=chatIDfor, from_chat_id=chatID, message_id=voice)
-    else:
-        update.message.reply_text("شنو انت لوتي لو تستلوت علينه هذا الامر بس للادمنيه")
