@@ -42,7 +42,7 @@ def handle_responses(input_massage, chat_id, message_id):
             return (f"the {splited[2]} of response {splited[1]} updated to {splited[3]}", 'edit')
 
         elif 'send_to' in splited[0]:
-            send_message(msg=splited[2], chat_id=splited[1])
+            send_message(msg=splited[2:], chat_id=splited[1])
             return
 
         # check return a tuple of respone and it's type
