@@ -4,6 +4,6 @@
 old.py
 test.py
 test_2.py
-telegram_bot/
+bot_venv/
 __pycache__/
 responses.json
