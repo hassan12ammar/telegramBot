@@ -1,6 +1,6 @@
 # import our files
 from constant import ADMIN_LIST
-from utilize import if_time_date, remove_from_string, send_message
+from utilize import if_time_date, join_with_sep, remove_from_string, send_message
 from data import add_non_forwarded, add_forwarded, delet, edit, give
 
 
@@ -42,7 +42,8 @@ def handle_responses(input_massage, chat_id, message_id):
             return (f"the {splited[2]} of response {splited[1]} updated to {splited[3]}", 'edit')
 
         elif 'send_to' in splited[0]:
-            send_message(msg=splited[2:], chat_id=splited[1])
+            message = join_with_sep(splited[2:], seperator=" ")
+            send_message(msg=message, chat_id=splited[1])
             return
 
         # check return a tuple of respone and it's type
