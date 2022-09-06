@@ -4,7 +4,7 @@ from utilize import join_with_sep, make_log
 from data import return_all
 
 
-def Bot_command(update, contax):
+def bot_command(update, contax):
     update.message.reply_text("نعم حبيبي الغالي تفضل")
 
 

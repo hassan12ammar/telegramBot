@@ -1,7 +1,7 @@
 # import modules we need
 import requests
 from telegram.ext import *
-from commands import Bot_command, error, help_command, list_command, start_comand
+from commands import bot_command, error, help_command, list_command, start_comand
 
 # import our files
 from responses import handle_responses
@@ -34,7 +34,7 @@ def main():
     updater = Updater(API_KEY)
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('bot', Bot_command) )
+    dp.add_handler(CommandHandler('bot', bot_command) )
     dp.add_handler(CommandHandler('help', help_command) )
     dp.add_handler(CommandHandler('list', list_command) )
     dp.add_handler(CommandHandler('start', start_comand) )
