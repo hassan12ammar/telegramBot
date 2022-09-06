@@ -46,8 +46,8 @@ def handle_responses(input_massage, chat_id, message_id):
             send_message(msg=message, chat_id=splited[1])
             return
 
-        # check return a tuple of respone and it's type
-        respone = give(userinput)
-        respone[0] = if_time_date(respone[0])
+    # check return a tuple of respone and it's type
+    respone = give(userinput)
+    respone[0] = if_time_date(respone[0])
 
-        return respone
+    return respone
